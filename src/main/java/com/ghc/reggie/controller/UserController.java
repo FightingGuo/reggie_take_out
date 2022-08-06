@@ -22,6 +22,7 @@ import java.util.Map;
 @ResponseBody
 @RequestMapping("/user")
 @Slf4j
+//加了注释
 public class UserController {
     @Autowired
     private UserService userService;
