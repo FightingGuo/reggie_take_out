@@ -12,9 +12,9 @@ spring:
       password: 442520
 
       redis:
-        host: 192.160.158:6379
+        host: 192.168.150.3:6379
         database: 0
-        password: 442520
+        #password: 442520
         timeout: 1800000
         lettuce:
         pool:
