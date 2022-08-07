@@ -14,12 +14,14 @@ spring:
   redis:
     host: 192.168.150.3
     port: 6379
-    connect-timeout: 1800000
     lettuce:
       pool:
         max-active: 5
         max-idle: 0
         max-wait: 1
+  cache:
+    redis:
+      time-to-live: 1800000
 
 
 mybatis-plus:
