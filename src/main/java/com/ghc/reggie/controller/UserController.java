@@ -8,10 +8,12 @@ import com.ghc.reggie.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 郭昊晨
@@ -26,6 +28,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -49,7 +54,12 @@ public class UserController {
 
             if (result){
                 //将生成的验证码保存导Session中
-                Session.setAttribute(phone,code);
+//                Session.setAttribute(phone,code);
+
+                //优化
+                //将生成的验证码存入redis中，并设置过期时间1min
+                redisTemplate.opsForValue().set(phone,code,1, TimeUnit.MINUTES);
+
                 return R.success("短信发送成功");
             }
             }
@@ -72,11 +82,13 @@ public class UserController {
         String code = map.get("code").toString();
 
         //从session中获取后端存的验证码
-        String smScode = Session.getAttribute(phone).toString();
+//        String smScode = Session.getAttribute(phone).toString();
 
+        //从redis中取出验证码
+        String smsCode = (String) redisTemplate.opsForValue().get(phone);
 
         //进行验证
-        if (smScode!=null && smScode.equals(code)){
+        if (smsCode!=null && smsCode.equals(code)){
             //判断是否为新用户,如果是新用户就自动完成注册
             LambdaQueryWrapper<User> userLqw=new LambdaQueryWrapper<>();
             userLqw.eq(User::getPhone,phone);
@@ -91,6 +103,8 @@ public class UserController {
             }
             //把登录成功的user放入session
             Session.setAttribute("user",user.getId());
+            //登录成功把验证码清除
+            redisTemplate.delete(phone);
             return R.success(user);
         }
 

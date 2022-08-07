@@ -11,16 +11,15 @@ spring:
       username: root
       password: 442520
 
-      redis:
-        host: 192.168.150.3:6379
-        database: 0
-        #password: 442520
-        timeout: 1800000
-        lettuce:
-        pool:
-        max-active: 20
-        max-idle: 5
-        min-idle: 0
+  redis:
+    host: 192.168.150.3
+    port: 6379
+    connect-timeout: 1800000
+    lettuce:
+      pool:
+        max-active: 5
+        max-idle: 0
+        max-wait: 1
 
 
 mybatis-plus:
