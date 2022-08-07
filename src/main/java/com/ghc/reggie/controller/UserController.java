@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ghc.reggie.bean.User;
 import com.ghc.reggie.service.UserService;
 import com.ghc.reggie.tencentSMSUtils.RamdomUtils;
+import com.ghc.reggie.utils.BaseContext;
 import com.ghc.reggie.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -113,4 +114,10 @@ public class UserController {
         return R.error("登录失败");
     }
 
+    @PostMapping("/loginout")
+    public R<String> logout(HttpSession session){
+        session.removeAttribute("user");
+
+        return R.success("用户退出");
+    }
 }
