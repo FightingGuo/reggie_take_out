@@ -4,12 +4,38 @@ server:
 spring:
   application:
     name: reggie_take_out
-  datasource:
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.150.3:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: 442520
+  shardingsphere:
+    datasource:
+      names: master,slave
+      #主数据源
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.150.3:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: 442520
+      #从数据源
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.150.4:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: 442520
+    #读写分离配置  负载均衡
+    masterslave:
+      load-balance-algorithm-type: round_robin  #轮循
+      #最终的数据源名称
+      name: dataSource
+      #主数据库名称
+      master-data-source-name: master
+      #从数据库名称
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true #开启sql显示
+  main:
+    allow-bean-definition-overriding: true
+
 
   redis:
     host: 192.168.150.3
@@ -22,6 +48,7 @@ spring:
   cache:
     redis:
       time-to-live: 1800000
+
 
 
 mybatis-plus:
