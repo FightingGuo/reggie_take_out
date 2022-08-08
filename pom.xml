@@ -89,7 +89,11 @@
             <version>1.4.5.RELEASE</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.1.0</version>
+        </dependency>
 
     </dependencies>
 
