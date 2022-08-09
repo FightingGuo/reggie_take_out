@@ -48,7 +48,11 @@ public class LoginCheckFilter implements Filter {
                 "/front/**",
                 "/common/**",
                 "/user/sendMsg", //移动端发送短信
-                "/user/login"    //移动端登录
+                "/user/login" ,   //移动端登录
+                "/doc.html",
+                "/webjars/**",
+                "/swagger-resources",
+                "/v2/api-docs"
         };
 
         //2、判断本次请求是否需要处理
@@ -65,7 +69,7 @@ public class LoginCheckFilter implements Filter {
         if (request.getSession().getAttribute("employee")!=null){
              Long empId=(Long) request.getSession().getAttribute("employee");
 
-            //把用户id存入ThreadLocal里
+            //把员工id存入ThreadLocal里
             BaseContext.setCurrentId(empId);
 
 //            log.info("用户已登录，用户id为:{}",request.getSession().getAttribute("employee"));

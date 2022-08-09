@@ -10,6 +10,9 @@ import com.ghc.reggie.dto.SetmealDto;
 import com.ghc.reggie.service.CategoryService;
 import com.ghc.reggie.service.SetmealService;
 import com.ghc.reggie.utils.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/setmeal")
 @ResponseBody
 @Slf4j
+@Api(tags = "套餐相关接口")
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
@@ -46,6 +50,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/page")
+    @ApiOperation(value = "分页数据接口")
     public R<Page> page(Integer page,Integer pageSize,String name){
         //因为页面需要categoryName属性，而我们setmeal对象里只有categoryId属性，所以页面展示不了菜品分类的属性
         //此时我们需要setmealDto
@@ -98,6 +103,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{st}")
+    @ApiOperation(value = "批量修改套餐状态接口")
     public R<String> updateStatus(@PathVariable Integer st,String ids){
         setmealService.updateStatus(st,ids);
 
@@ -111,6 +117,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @ApiOperation(value = "删除套餐接口")
     //当setmealCache里的数据 被增删改之后清除缓存
     @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> deleteDish(String ids){
@@ -126,6 +133,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "新增套擦接口")
     @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> save(@RequestBody SetmealDto setmealDto){
 //        log.info("set={}",setmealDto);
@@ -139,6 +147,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "修改套餐接口")
     @CacheEvict(value = "setmealCache",allEntries = true) //allEntries设置清除所以数据
     public R<SetmealDto> updateSetmeal(@PathVariable Long id){
         SetmealDto setmealDto = setmealService.getByIdWithsetmealDishes(id);
@@ -151,6 +160,7 @@ public class SetmealController {
      * @return
      */
     @PutMapping
+    @ApiOperation(value = "保存套餐接口")
     @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> updateSetmeal(@RequestBody SetmealDto setmealDto){
         setmealService.saveSetmealWithDish(setmealDto);
@@ -163,6 +173,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @ApiOperation(value = "获取套餐数据接口")
     @Cacheable(value = "setmealCache",key ="'setmeal_'+#setmeal.categoryId+'_'+#setmeal.status")
     public R<List<Setmeal>> getSetMealDto(Setmeal setmeal){
         LambdaQueryWrapper<Setmeal> setmealLqw=new LambdaQueryWrapper<>();
