@@ -37,7 +37,7 @@ public class OrdersController {
         return R.success("下单成功");
     }
 
-    @GetMapping("/userPage")
+    @GetMapping("/page")
     public R<Page<Orders>> page(Integer page,Integer pageSize){
 
         //构造分页构造器
@@ -50,4 +50,6 @@ public class OrdersController {
 
         return R.success(pg);
     }
+
+
 }
