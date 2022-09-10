@@ -63,12 +63,12 @@ mybatis-plus:
 
 tencent:
       msm:
-      id: AKIDVosyoNfhRu50e17xXqsc6JFuJRHq89tM
-      secret: EBrGOFp8AvQeaFdkb7NM4UdW9UYLr64l
+      id: xxxxxxxxxxx
+      secret: xxxxxxxx
       endPoint: sms.tencentcloudapi.com
-      appId: 1400714471
+      appId: xxxxxx
 #      signName: 外卖编程公众号
-      templateId: 1491829
+      templateId: xxxxxx
 
 
 reggie:
