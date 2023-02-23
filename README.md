@@ -7,17 +7,21 @@
 
 
 部署环境说明
-服务器:
-●192.168.150.3 (服务器A)
-Nginx:部署前端项目、配置反向代理
-Mysql:主从复制结构中的主库
+docker容器化部署:
+宿主机（centos7）:192.168.150.3
+配置国内阿里云容器镜像
+拉取redis、mysql、nginx镜像
+根据mysql镜像run两个mysql容器实例(注意映射容器内不同端口), 配置mysql的主从复制
+1.分别对两个容器挂载两个容器卷到宿主机的两个不同目录 分别存放mysql的配置文件(conf)、日志文件(log)、数据(data) 
+2.配置两个mysqld.cnf配置文件
+3.在Master库创建数据同步用户,授予用户 slave REPLICATION SLAVE权限和REPLICATION CLIENT权限，用于在主从库之间同步数据 CREATE USER 'slave'@'%' IDENTIFIED BY '123456';
+4.进入Master库  show master status 记录File和Position字段的值
+5.进入Slave库 执行change master to master_host='172.18.0.3', master_user='slave', master_password='123456', master_port=3306, master_log_file='master-bin.000001', master_log_pos=617, master_connect_retry=30;
+6.start slave;
 
-●192.168.150.4 (服务器B)
-jdk:运行Java项目
-git:版本控制工具
-maven:项目构建工具
-jar: Spring Boot项目打成jar包基于内置Tomcat运行
-Redis:缓存中间件
+拉取nginx镜像:部署前端项目、配置反向代理
+
+拉取redis:同样也挂载容器卷到宿主机 指定宿主机上的配置文件启动redis
 
 
 

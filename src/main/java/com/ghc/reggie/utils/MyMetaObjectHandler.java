@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +21,7 @@ import java.time.LocalDateTime;
  */
 @Component
 @Slf4j
-public class MyMetaObjectHandler implements MetaObjectHandler {
+public abstract class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
 //        log.info("公共字段自动填充【insert】");
